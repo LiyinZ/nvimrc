@@ -9,8 +9,11 @@ call plug#begin()
 
 " *PRIMARY PLUGINS*
 Plug 'lfilho/cosco.vim'             " smart comma, semicolon
-Plug 'ctrlpvim/ctrlp.vim'               " fuzzy file/buffer search
+Plug 'ctrlpvim/ctrlp.vim'           " fuzzy file/buffer search
 Plug 'Raimondi/delimitMate'         " closing brackets, quotes, etc.
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'             " fzf vim integration
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'scrooloose/Syntastic'         " real time error checking
 Plug 'ervandew/supertab'            " tab auto completion
 Plug 'tpope/vim-commentary'         " easier commenting
@@ -168,7 +171,7 @@ nnoremap <expr> { foldclosed(search('^$', 'Wnb')) == -1 ? "{" : "{k{"
 " ---------------------------------------------------------------------------
 
 " switch window
-nnoremap <Tab> <C-w>p
+nnoremap <Tab> <C-w>W
 
 " insert current datetime
 nnoremap <F5> "=strftime("%c")<CR>P
@@ -206,8 +209,8 @@ noremap <Leader>p "+p
 noremap <Leader>P "+P
 
 " quickly open and edit vimrc within nvim
-noremap <Leader>vn :vs ~/.config/nvim/init.vim<CR>
-noremap <Leader>vi :vs ~/.vimrc<CR>
+noremap <Leader>vn :e ~/.config/nvim/init.vim<CR>
+noremap <Leader>vi :e ~/.vimrc<CR>
 noremap <Leader>V :tabe ~/.config/nvim/init.vim<CR>
 nnoremap <Leader>so :so ~/.config/nvim/init.vim<CR>
 
@@ -254,7 +257,7 @@ autocmd FileType javascript,css inoremap <silent> <C-k> <c-o>:call cosco#commaOr
 
 " CtrlP {{{
 " ignore .git folders to speed up searches
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_max_depth = 15
 let g:ctrlp_max_files = 30000
 " include hidden files
@@ -264,10 +267,10 @@ let g:ctrlp_map = '<Leader>]'
 " Use python matcher
 let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch'  }
 " specific directory search
-nnoremap <Leader>[ :CtrlP %<CR>
+nnoremap <silent> <Leader>[ :CtrlPCurWD<CR>
 " access recent files and buffers
-nnoremap <Leader>e :CtrlPMRUFiles<CR>
-nnoremap <Leader>b :CtrlPBuffer<CR>
+nnoremap <silent> <Leader>e :CtrlPMRUFiles<CR>
+nnoremap <silent> <Leader>b :CtrlPBuffer<CR>
 " }}}
 
 " delimitMate {{{
@@ -278,8 +281,33 @@ let delimitMate_expand_cr = 1
 inoremap <C-l> <C-o>A;<Esc>
 " }}}
 
+" fzf.vim {{{
+let g:fzf_layout = { 'down': '30%' }
+nnoremap <silent><Leader>fz :FZF<CR>
+nnoremap <Leader>F :Files ~/
+nnoremap <silent><Leader>fb :Buffers<CR>
+" }}}
+
 " lightline {{{
 let g:lightline = { 'colorscheme': 'wombat' }
+" }}}
+
+" NERDTree {{{
+" NERDTree Toggle shortcut
+nnoremap <Leader>N :NERDTreeToggle<CR><C-w>=
+" Auto delete buffer
+let NERDTreeAutoDeleteBuffer = 1
+" Auto CWD
+let NERDTreeChDirMode = 1
+" Show hidden file by default
+let NERDTreeShowHidden = 1
+" map key help from ? to ÷
+let NERDTreeMapHelp = '÷'
+" so that I can use default J/K within NT
+let NERDTreeMapJumpLastChild = 'gj'
+let NERDTreeMapJumpFirstChild = 'gk'
+" so that I can use vim-sneak within NT
+let NERDTreeMapOpenVSplit = '<C-v>'
 " }}}
 
 " Syntastic {{{
