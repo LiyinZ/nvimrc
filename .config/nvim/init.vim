@@ -37,6 +37,7 @@ Plug 'jelera/vim-javascript-syntax' " Enhanced JS
 " *AESTHETIC PLUGINS*
 Plug 'itchyny/lightline.vim'        " better looking UI
 Plug 'kristijanhusak/vim-hybrid-material' " material theme
+Plug 'mhartington/oceanic-next'     " material theme;
 " Plug 'gcmt/taboo.vim'               " rename tabs
 " Plug 'jdkanani/vim-material-theme'    " another material theme
 
@@ -62,6 +63,7 @@ set synmaxcol=400    " don't highlight past 400 characters
 set ignorecase       " search isn't case sensitive
 set incsearch        " incremental search
 set ruler
+set lazyredraw       " redraw the screen less often
 set splitbelow  " Open new split panes to right and bottom,
 set splitright  "  which feels more natural
 set diffopt+=vertical " Always use vertical diffs
@@ -75,8 +77,9 @@ set diffopt+=vertical " Always use vertical diffs
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 " set background=dark
-" colorscheme material-theme
-colorscheme hybrid_material
+" colorscheme hybrid_material
+colorscheme hybrid_reverse
+" colorscheme OceanicNext
 
 " highlight cursor line on active window
 augroup CursorLine
@@ -86,8 +89,8 @@ au!
 augroup END
 
 " Make it obvious where 80 characters is
-set textwidth=80
-set colorcolumn=+1
+" set textwidth=80
+set colorcolumn=81
 
 " }}}
 " ===========================================================================
@@ -100,6 +103,13 @@ set shiftwidth=2
 set shiftround
 set expandtab
 
+" indent/format settings for different file types
+augroup filetype_specific
+  au!
+  au FileType vim  :setlocal ts=2 sts=0 sw=2 et fdm=marker fdl=0
+augroup END
+
+" last knwon cursor, auto markdown
 augroup vimrcEx
   autocmd!
 
@@ -118,6 +128,8 @@ augroup vimrcEx
   " Enable spellchecking for Markdown
   autocmd FileType markdown setlocal spell
 
+  " autocmd BufWinLeave *.* mkview
+  " autocmd BufWinEnter *.* silent loadview
 augroup END
 
 
@@ -145,9 +157,6 @@ noremap J 10j
 noremap K 10k
 " Ctrl h / l for easy beginning / end of line, TODO <BS> fix in future
 noremap <C-h> ^
-noremap <C-l> $
-" <C-h> originally same as h, <C-l> originally redraw screen
-noremap <BS> ^
 noremap <C-l> $
 " move by wrapped lines instead of line numbers
 noremap j gj
